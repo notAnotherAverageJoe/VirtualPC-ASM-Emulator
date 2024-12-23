@@ -36,6 +36,12 @@ public:
     VirtualCPU(int registerCount, int memorySize)
         : registers(registerCount, 0), memory(memorySize, 0), programCounter(0), running(true) {}
 
+    // needed to add a getter for memory to access
+    const std::vector<int> &getMemory() const
+    {
+        return memory;
+    }
+
     void loadProgram(const std::vector<Instruction> &prog)
     {
         program = prog;
@@ -99,10 +105,10 @@ public:
 std::vector<Instruction> assembleProgram()
 {
     return {
-        {LOAD, 0, 10, 0}, // LOAD R0, 10
-        {LOAD, 1, 20, 0}, // LOAD R1, 20
-        {ADD, 0, 1, 0},   // ADD R0, R1
-        {PRINT, 0, 0, 0}, // PRINT R0
+        {LOAD, 0, 10, 0}, // load R0 with 10
+        {LOAD, 1, 20, 0}, // Load r1 with 20
+        {ADD, 0, 1, 0},   // ADD R0, R1  10 + 20 = 30
+        {PRINT, 0, 0, 0}, // print out R0
         {STORE, 0, 0, 0}, // STORE R0 to MEM[0]
         {HALT, 0, 0, 0}   // HALT
     };
@@ -115,8 +121,8 @@ std::vector<Instruction> subProgram()
         {LOAD, 1, 25, 0}, // load 25 into R1
         {SUBTRACT, 0, 1, 0},
         {PRINT, 0, 0, 0},
-        {STORE, 0, 0, 0},
-        {HALT, 0, 0, 0} // stop the prog
+        {STORE, 0, 12, 0}, // stored into R0 into MEM[12]
+        {HALT, 0, 0, 0}    // stop the prog
     };
 }
 
@@ -134,6 +140,14 @@ int main()
     cpu.execute();
     cpu.loadProgram(subtractProgram);
     cpu.execute();
+
+    // Proof of functionality -> print out memory contents using the getter
+    std::cout << "Memory contents after program execution:" << std::endl;
+    const auto &memory = cpu.getMemory(); // Using the getter method
+    for (int i = 0; i < memory.size(); ++i)
+    {
+        std::cout << "MEM[" << i << "] = " << memory[i] << std::endl;
+    }
 
     return 0;
 }
