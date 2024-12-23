@@ -66,6 +66,9 @@ public:
             case ADD:
                 registers[instr.arg1] += registers[instr.arg2];
                 break;
+            case SUBTRACT:
+                registers[instr.arg1] -= registers[instr.arg2];
+                break;
             case STORE:
                 memory[instr.arg2] = registers[instr.arg1];
                 break;
@@ -111,7 +114,7 @@ std::vector<Instruction> subProgram()
     {
         {LOAD, 0, 50, 0},
             {LOAD, 1, 25, 0},
-        }
+    }
 }
 
 int main()
