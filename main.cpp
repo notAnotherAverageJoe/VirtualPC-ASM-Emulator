@@ -113,7 +113,7 @@ std::vector<Instruction> subProgram()
     return {
         {LOAD, 0, 50, 0}, // load 50 in R0
         {LOAD, 1, 25, 0}, // load 25 into R1
-        {SUBTRACT, 1, 0, 0},
+        {SUBTRACT, 0, 1, 0},
         {PRINT, 0, 0, 0},
         {STORE, 0, 0, 0},
         {HALT, 0, 0, 0} // stop the prog
