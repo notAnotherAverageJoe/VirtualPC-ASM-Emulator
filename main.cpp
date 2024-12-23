@@ -70,8 +70,17 @@ public:
                 break;
 
             case ADD:
-                registers[instr.arg1] += registers[instr.arg2];
-                break;
+                if (instr.arg3 >= 0)
+                {
+                    registers[instr.arg1] += registers[instr.arg2] += registers[instr.arg3];
+                    break;
+                }
+                else
+                { // better to be safe then get bizzare behavior. Checks for arg 3 >0  if not add the two
+                    registers[instr.arg1] += registers[instr.arg2];
+                    break;
+                }
+
             case SUBTRACT:
                 registers[instr.arg1] -= registers[instr.arg2];
                 break;
@@ -107,7 +116,8 @@ std::vector<Instruction> assembleProgram()
     return {
         {LOAD, 0, 10, 0}, // load R0 with 10
         {LOAD, 1, 20, 0}, // Load r1 with 20
-        {ADD, 0, 1, 0},   // ADD R0, R1  10 + 20 = 30
+        {LOAD, 2, 40, 0},
+        {ADD, 0, 1, 2},   // ADD R0, R1  10 + 20 = 30
         {PRINT, 0, 0, 0}, // print out R0
         {STORE, 0, 0, 0}, // STORE R0 to MEM[0]
         {HALT, 0, 0, 0}   // HALT
@@ -121,14 +131,14 @@ std::vector<Instruction> subProgram()
         {LOAD, 1, 25, 0}, // load 25 into R1
         {SUBTRACT, 0, 1, 0},
         {PRINT, 0, 0, 0},
-        {STORE, 0, 12, 0}, // stored into R0 into MEM[12]
+        {STORE, 0, 12, 0}, // stored the info in R0 into MEM[12]
         {HALT, 0, 0, 0}    // stop the prog
     };
 }
 
 int main()
 {
-    // Initialize Virtual CPU with 4 registers and 16 memory slots
+    // Initialize Virtual CPU with 4 registers and 16 memory slots - Getter for memory at the end
     VirtualCPU cpu(4, 16);
 
     // Assemble the program
@@ -143,7 +153,7 @@ int main()
 
     // Proof of functionality -> print out memory contents using the getter
     std::cout << "Memory contents after program execution:" << std::endl;
-    const auto &memory = cpu.getMemory(); // Using the getter method
+    const auto &memory = cpu.getMemory(); // getter method -> LINE 40
     for (int i = 0; i < memory.size(); ++i)
     {
         std::cout << "MEM[" << i << "] = " << memory[i] << std::endl;
