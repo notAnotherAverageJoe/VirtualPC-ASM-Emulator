@@ -144,12 +144,12 @@ std::vector<Instruction> subProgram()
 std::vector<Instruction> multProgram()
 {
     return {
-        {LOAD, 1, 10, 0},
-        {LOAD, 5, 10, 0},
-        {MULTIPLY, 1, 5, 0},
-        {PRINT, 1, 0, 0},
-        {STORE, 1, 6, 0},
-        {HALT, 0, 0, 0}};
+        {LOAD, 1, 10, 0},    // Load 10 into register 1
+        {LOAD, 5, 10, 0},    // Load 10 into register 5
+        {MULTIPLY, 1, 5, 0}, // call multiply of the values in register 1 and 5
+        {PRINT, 1, 0, 0},    // print the result stored into register 1
+        {STORE, 1, 6, 0},    // save it to memoery in one of the 16 slots
+        {HALT, 0, 0, 0}};    // stop the prog
 }
 
 int main()
