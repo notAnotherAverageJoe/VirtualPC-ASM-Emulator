@@ -119,10 +119,10 @@ std::vector<Instruction> assembleProgram()
         {LOAD, 0, 10, 0}, // load R0 with 10
         {LOAD, 1, 20, 0}, // Load r1 with 20
         {LOAD, 2, 40, 0},
-        {ADD, 0, 1, 2},   // ADD R0, R1  10 + 20 = 30
+        {ADD, 0, 1, 2},   // add R0, R1  10 + 20 = 30
         {PRINT, 0, 0, 0}, // print out R0
-        {STORE, 0, 0, 0}, // STORE R0 to MEM[0]
-        {HALT, 0, 0, 0}   // HALT
+        {STORE, 0, 0, 0}, // store R0 to MEM[0]
+        {HALT, 0, 0, 0}   // stops prog
     };
 }
 
@@ -140,6 +140,11 @@ std::vector<Instruction> subProgram()
 
 std::vector<Instruction> multProgram()
 {
+    return {
+        {LOAD, 1, 10, 0},
+        {LOAD, 5, 10, 0},
+        {MULTIPLY, 1, 5, 0},
+        {PRINT, 1, 0, 0}};
 }
 
 int main()
