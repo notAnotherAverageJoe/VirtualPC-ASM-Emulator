@@ -138,6 +138,10 @@ std::vector<Instruction> subProgram()
     };
 }
 
+std::vector<Instruction> multProgram()
+{
+}
+
 int main()
 {
     // Initialize Virtual CPU with 4 registers and 16 memory slots - Getter for memory at the end
