@@ -9,6 +9,8 @@ enum Opcode
     ADD,
     SUBTRACT,
     STORE,
+    MULTIPLY,
+    // divide
     JUMP,
     PRINT,
     HALT
@@ -127,12 +129,12 @@ std::vector<Instruction> assembleProgram()
 std::vector<Instruction> subProgram()
 {
     return {
-        {LOAD, 0, 50, 0}, // load 50 in R0
-        {LOAD, 1, 25, 0}, // load 25 into R1
-        {SUBTRACT, 0, 1, 0},
-        {PRINT, 0, 0, 0},
-        {STORE, 0, 12, 0}, // stored the info in R0 into MEM[12]
-        {HALT, 0, 0, 0}    // stop the prog
+        {LOAD, 0, 50, 0},    // load 50 in R0
+        {LOAD, 1, 25, 0},    // load 25 into R1
+        {SUBTRACT, 0, 1, 0}, // 50 - 25
+        {PRINT, 0, 0, 0},    // Register[0] = 25
+        {STORE, 0, 12, 0},   // now we take the data in R0 and save it into MEM[12]
+        {HALT, 0, 0, 0}      // stop the prog
     };
 }
 
@@ -151,7 +153,7 @@ int main()
     cpu.loadProgram(subtractProgram);
     cpu.execute();
 
-    // Proof of functionality -> print out memory contents using the getter
+    // proof of functionality -> print out memory contents using the getter
     std::cout << "Memory contents after program execution:" << std::endl;
     const auto &memory = cpu.getMemory(); // getter method -> LINE 40
     for (int i = 0; i < memory.size(); ++i)
