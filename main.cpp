@@ -86,6 +86,9 @@ public:
             case SUBTRACT:
                 registers[instr.arg1] -= registers[instr.arg2];
                 break;
+            case MULTIPLY:
+                registers[instr.arg1] *= registers[instr.arg2];
+                break;
             case STORE:
                 memory[instr.arg2] = registers[instr.arg1];
                 break;
@@ -144,7 +147,9 @@ std::vector<Instruction> multProgram()
         {LOAD, 1, 10, 0},
         {LOAD, 5, 10, 0},
         {MULTIPLY, 1, 5, 0},
-        {PRINT, 1, 0, 0}};
+        {PRINT, 1, 0, 0},
+        {STORE, 1, 6, 0},
+        {HALT, 0, 0, 0}};
 }
 
 int main()
@@ -155,15 +160,19 @@ int main()
     // Assemble the program
     auto program = assembleProgram();
     auto subtractProgram = subProgram();
+    auto multiplyProgram = multProgram();
 
     // Load and execute the program
     cpu.loadProgram(program);
     cpu.execute();
     cpu.loadProgram(subtractProgram);
     cpu.execute();
+    cpu.loadProgram(multiplyProgram);
+    cpu.execute();
 
     // proof of functionality -> print out memory contents using the getter
-    std::cout << "Memory contents after program execution:" << std::endl;
+    std::cout
+        << "Memory contents after program execution:" << std::endl;
     const auto &memory = cpu.getMemory(); // getter method -> LINE 40
     for (int i = 0; i < memory.size(); ++i)
     {
