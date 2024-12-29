@@ -10,7 +10,7 @@ enum Opcode
     SUBTRACT,
     STORE,
     MULTIPLY,
-    // divide
+    DIVIDE,
     JUMP,
     PRINT,
     HALT
@@ -55,6 +55,7 @@ public:
     {
         while (running)
         {
+
             Instruction instr = program[programCounter];
             programCounter++;
             switch (instr.op)
@@ -78,7 +79,7 @@ public:
                     break;
                 }
                 else
-                { // better to be safe then get bizzare behavior. Checks for arg 3 >0  if not add the two
+                { // better to be safe then sorry here and get bizzare behavior. Checks for arg 3 >0  if not add the two
                     registers[instr.arg1] += registers[instr.arg2];
                     break;
                 }
@@ -88,6 +89,18 @@ public:
                 break;
             case MULTIPLY:
                 registers[instr.arg1] *= registers[instr.arg2];
+                break;
+            case DIVIDE:
+                if (registers[instr.arg2] != 0)
+                {
+                    registers[instr.arg1] /= registers[instr.arg2];
+                    std::cout << "Divided Register[" << instr.arg1 << "] by Register[" << instr.arg2 << "]" << std::endl;
+                }
+                else
+                {
+                    std::cout << "Error: Division by zero!" << std::endl;
+                    running = false;
+                }
                 break;
             case STORE:
                 memory[instr.arg2] = registers[instr.arg1];
@@ -151,6 +164,16 @@ std::vector<Instruction> multProgram()
         {STORE, 1, 6, 0},    // save it to memoery in one of the 16 slots
         {HALT, 0, 0, 0}};    // stop the prog
 }
+std::vector<Instruction> divProgram()
+{
+    return {
+        {LOAD, 0, 40, 0},  // Load 40 into register 1
+        {LOAD, 1, 2, 0},   // load 2 into register 2
+        {DIVIDE, 0, 1, 0}, // divide 40 / 2 = 20
+        {PRINT, 0, 0, 0},  // print the result stored in register 1
+        {STORE, 0, 9, 0},  // store the data of register 1 into mem[9]
+        {HALT, 0, 0, 0}};  // stop program
+}
 
 int main()
 {
@@ -161,6 +184,7 @@ int main()
     auto program = assembleProgram();
     auto subtractProgram = subProgram();
     auto multiplyProgram = multProgram();
+    auto divideProgram = divProgram();
 
     // Load and execute the program
     cpu.loadProgram(program);
@@ -168,6 +192,8 @@ int main()
     cpu.loadProgram(subtractProgram);
     cpu.execute();
     cpu.loadProgram(multiplyProgram);
+    cpu.execute();
+    cpu.loadProgram(divideProgram);
     cpu.execute();
 
     // proof of functionality -> print out memory contents using the getter
